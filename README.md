@@ -90,7 +90,7 @@ Take a quick look at the following code or run it to see how everything works.
 
 // Create a debouncer for an integer with a specific threshold
 Debouncer<int> my_debouncer(1000 * 3);          // stable integer with 3s delay
-DebouncedSwitch my_switch(BUTTON_PIN, 200);     // switch on pin 4 with 200ms threshold
+DebouncedSwitch my_switch(BUTTON_PIN, 50);      // switch on pin 4 with 50ms threshold
 
 void setup() {
     pinMode(BUTTON_PIN, INPUT_PULLUP);
@@ -117,7 +117,7 @@ void loop() {
     /* Specialized debouncer for switches */
     my_switch.debounce();
     if (my_switch.hasChanged()) {
-        Serial.print("Hooray, somebody pushed the switch! State is now: ");
+        Serial.print("Hooray, somebody pushed the button! State is now: ");
         Serial.println(my_switch.isClosed() ? "pressed" : "not pressed");
     }
 }

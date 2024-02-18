@@ -86,11 +86,14 @@ Take a quick look at the following code or run it to see how everything works.
 ```cpp
 #include "./src/lib/debouncer/debouncer.h"
 
+#define BUTTON_PIN 4
+
 // Create a debouncer for an integer with a specific threshold
-Debouncer<int> my_debouncer(1000 * 3);  // =3 seconds
-DebouncedSwitch my_switch(4, 200);      // switch on pin 4 with 200ms threshold
+Debouncer<int> my_debouncer(1000 * 3);          // stable integer with 3s delay
+DebouncedSwitch my_switch(BUTTON_PIN, 50);      // switch on pin 4 with 50ms threshold
 
 void setup() {
+    pinMode(BUTTON_PIN, INPUT_PULLUP);
     Serial.print("Threshold of my_debouncer is ");
     Serial.println(my_debouncer.getThreshold());
 }
@@ -114,7 +117,7 @@ void loop() {
     /* Specialized debouncer for switches */
     my_switch.debounce();
     if (my_switch.hasChanged()) {
-        Serial.print("Hooray, somebody pushed the switch! State is now: ");
+        Serial.print("Hooray, somebody pushed the button! State is now: ");
         Serial.println(my_switch.isClosed() ? "pressed" : "not pressed");
     }
 }

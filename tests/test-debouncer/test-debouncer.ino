@@ -2,7 +2,7 @@
 
 #include <AUnitVerbose.h>
 #include "./debouncer.h"
-// #include "../../lib/timer/timer.h"
+#include "./lib/timer/timer.h"
 
 
 template<class T>

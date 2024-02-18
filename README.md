@@ -96,7 +96,7 @@ void setup() {
 }
 
 void loop() {
-    // General debouncer for arbitrary types
+    /* General debouncer for arbitrary types */
     my_debouncer.debounce(5);           // Simulate an incoming "5"
     delay(1000);                        // Wait a second...
 
@@ -111,7 +111,8 @@ void loop() {
         Serial.println(my_debouncer.getDebounced());
     }
 
-    // Specialized debouncer for switches
+    /* Specialized debouncer for switches */
+    my_switch.debounce();
     if (my_switch.hasChanged()) {
         Serial.print("Hooray, somebody pushed the switch! State is now: ");
         Serial.println(my_switch.isClosed() ? "pressed" : "not pressed");

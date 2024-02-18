@@ -24,20 +24,21 @@ other. Because any data type which offers an equality operator can be processed,
 debounce anything you like! A value will be considered as debounced if it did
 not change during the set threshold time.
 
-- `Debouncer<T>` (constructor): Create a Debouncer object. If a threshold is
-  provided as argument, it will be immediately applied.
-- `set/getThreshold`: Explicitly sets or gets the desired threshold time to
-  mark a value as stable/debounced.
+- `Debouncer<T>` (constructor): Create a Debouncer object for use with a signal
+  of a specific type `T`. If a threshold is provided as argument, it will be
+  immediately applied.
+- `set/getThreshold`: Explicitly sets or gets the desired threshold time after
+  which a value will become stable/debounced.
 - `isReady`: Returns true if a stable value has been recorded at least once
   since start-up or reset.
-- `getDebounced`: The most important function: Returns the latest value
+- `getDebounced`: *The most important function*: Returns the latest value
   considered as stable.
-- `getRaw`: Returns the latest value which has been read by `debounce()`.
-- `hasChanged`: Returns true *once* if the debounced state has changed since the
-  last call of this function. (Tip: Store the result in a variable if needed
+- `getRaw`: Returns the *bare* value which has been read latest by `debounce()`.
+- `hasChanged`: Returns true **once** if the debounced state has changed since
+  the last call of this function. (Tip: Store the result in a variable if needed
   more than once on a particular signal!)
 - `debounce`: The debounce routine which does all the work. Must be called with
-  the actual input value once in each `loop()` cycle.
+  the actual input value *once in each `loop()` cycle*.
 - `reset`: Resets all internal states and sets the signal as stale.
 
 ### Specialized form for buttons or boolean sensors (`DebouncedSwitch`)
@@ -46,12 +47,12 @@ A DebouncedSwitch object is derived from `Debouncer<bool>` and especially useful
 for simple binary sensors like hardware buttons.
 
 - `DebouncedSwitch` (constructor): Create a DebouncedSwitch object which an
-  optional threshold as described above. Also, a specific pin to read is
+  optional threshold as described above. Also, *a specific pin to read* is
   directly assigned and whether this pin is hooked with a pull-up resistor
   (default) or not.
-- `debounce`: The debounce routine as above. Note that by the given pin, the
-  digital values is read automatically - no argument is required here. However,
-  this function must be called once in each `loop()` cycle, too.
+- `debounce`: The debounce routine as above. Note that by the given pin, its
+  digital value will be read automatically - no argument is required here!
+  However, this function must be called once in each `loop()` cycle, too.
 - `isOpen`: Convenience function to quickly check if the attached switch is
   open.
 - `isClosed`: Convenience function to quickly check if the attached switch is

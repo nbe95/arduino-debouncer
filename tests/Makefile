@@ -3,6 +3,7 @@ tests:
 	for i in test-*/Makefile; do \
 		echo '==== Making:' $$(dirname $$i); \
 		find ../ -regex '.+\.\(cpp\|h\)' -exec cp "{}" "$$(dirname $$i)" \; ; \
+		cp -r ../lib $$(dirname $$i); \
 		$(MAKE) -C $$(dirname $$i); \
 	done
 
@@ -18,5 +19,6 @@ clean:
 	for i in test-*/Makefile; do \
 		echo '==== Cleaning:' $$(dirname $$i); \
 		find -regex '.+\.\(cpp\|h\)' -delete; \
+		rm -rf $$(dirname $$i)/lib; \
 		$(MAKE) -C $$(dirname $$i) clean; \
 	done

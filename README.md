@@ -1,65 +1,72 @@
 # Simple Debouncer for Arduino etc.
 
-Whenever an embedded project relies on hardware input, signal states of buttons,
-switches etc. are not stable and
+Whenever an embedded project relies on hardware inputs, the signal states of
+physical buttons etc. are not stable and
 [debouncing](https://en.wikipedia.org/wiki/Switch#Contact_bounce) is a
 must-have.
 
-This is a basic OOP implementation for easy debouncing in software without any
-need for additional hardware. [Scroll down](#example-code) for a meaningful
-example.
+This is a basic OOP implementation for easy debouncing done in software, thus it
+works without any need for additional hardware. It can handle both arbitrary
+types (which can be compared for equality among two distinct instances) as well
+as bare boolean signals, i.e. buttons and switches.
+
+This means, a specific signal's state will be read in each `loop()` cycle and
+stored internally. If it did not change during a specific threshold time, it
+will be considered as stable/debounced and can be processed further with ease.
+[Scroll down](#example-code) for a meaningful example.
 
 ## Features
 
-### Debouncer for arbitrary types
+### Debouncer for arbitrary types (`Debouncer<T>`)
 
-All Debouncer objects are independent of each other. Debounce anything you like!
-A value of any data type will be considered 'debounced' if it did not change
-during the threshold time.
+All Debouncer objects created at build time or runtime are independent of each
+other. Because any data type which offers an equality operator can be processed,
+debounce anything you like! A value will be considered as debounced if it did
+not change during the set threshold time.
 
 - `Debouncer<T>` (constructor): Create a Debouncer object. If a threshold is
-  provided as argument, it will be immediately applied as threshold time for a
-  signal considered as stable.
-- `set/getThreshold`: Sets or gets the desired threshold time used to mark a
-  value as stable/debounced.
+  provided as argument, it will be immediately applied.
+- `set/getThreshold`: Explicitly sets or gets the desired threshold time to
+  mark a value as stable/debounced.
 - `isReady`: Returns true if a stable value has been recorded at least once
   since start-up or reset.
-- `getDebounced`: Returns the latest value considered as stable.
-- `getRaw`: Returns the latest value read, which is not processed any further.
-- `hasChanged`: Returns true *once* if tht debounced state has changed since the
-  last call of this function. (Tip: Store the result if needed more than once on
-  a particular signal!)
+- `getDebounced`: The most important function: Returns the latest value
+  considered as stable.
+- `getRaw`: Returns the latest value which has been read by `debounce()`.
+- `hasChanged`: Returns true *once* if the debounced state has changed since the
+  last call of this function. (Tip: Store the result in a variable if needed
+  more than once on a particular signal!)
 - `debounce`: The debounce routine which does all the work. Must be called with
-  the actual input value once in each `loop()` cycle!
+  the actual input value once in each `loop()` cycle.
 - `reset`: Resets all internal states and sets the signal as stale.
 
-### Specialized debouncer for buttons or boolean sensors
+### Specialized form for buttons or boolean sensors (`DebouncedSwitch`)
 
-A DebouncedSwitch object is derived from Debouncer\<bool\> and especially useful
-for simple binary sensors like a hardware button.
+A DebouncedSwitch object is derived from `Debouncer<bool>` and especially useful
+for simple binary sensors like hardware buttons.
 
 - `DebouncedSwitch` (constructor): Create a DebouncedSwitch object which an
   optional threshold as described above. Also, a specific pin to read is
-  directly assigned and whether this pin is hooked with a pull-up resistor or
-  not.
+  directly assigned and whether this pin is hooked with a pull-up resistor
+  (default) or not.
 - `debounce`: The debounce routine as above. Note that by the given pin, the
-  digital values is read automatically and does not need any argument. However,
+  digital values is read automatically - no argument is required here. However,
   this function must be called once in each `loop()` cycle, too.
 - `isOpen`: Convenience function to quickly check if the attached switch is
   open.
 - `isClosed`: Convenience function to quickly check if the attached switch is
   closed.
 
-A Debouncer object that is casted to a `bool` will evaluate to `true` if a
+Any Debouncer object that is casted to a `bool` will evaluate to `true` if a
 stable/debounced value has been recorded at least once, otherwise `false`. This
 can be useful e.g. for a quick check in a single if-clause.
 
 ## Quick start
 
-Add the timer header file to your source code, e.g. by cloning this repository
-as a [git submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules) under
-`src/lib/` of your main sketch. Use the default git workflow to pull/upgrade
-etc.
+Add the debouncer header file to your source code, e.g. by cloning this
+repository as a [git submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules)
+under `src/lib/` of your main sketch. Use the default git workflow to
+pull/upgrade etc.
 
 ```sh
 git clone https://github.com/nbe95/arduino-debouncer.git ./src/lib/debouncer/
@@ -69,7 +76,7 @@ git clone https://github.com/nbe95/arduino-debouncer.git ./src/lib/debouncer/
 > :information_source: In the Arduino universe, it is required that the code
 resides under the main `src` directory of your sketch!
 
-Then, simply include the `timer.h` in your sketch and you're ready to go.
+Then, simply include the `debouncer.h` in your sketch and you're ready to go.
 
 Take a quick look at the following code or run it to see how everything works.
 

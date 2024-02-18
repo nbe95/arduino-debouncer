@@ -71,58 +71,42 @@ resides under the main `src` directory of your sketch!
 
 Then, simply include the `timer.h` in your sketch and you're ready to go.
 
-Take a quick look at the following code to see how everything works.
+Take a quick look at the following code or run it to see how everything works.
 
 ### Example code
 
 ```cpp
-#include "./src/lib/timer/timer.h"
+#include "./src/lib/debouncer/debouncer.h"
 
-// Create a timer with or without a specific duration in ms...
-Timer my_timer(1000ul * 60 * 60 * 24 * 3);  // =3 days
-Timer another_timer;
+// Create a debouncer for an integer with a specific threshold
+Debouncer<int> my_debouncer(1000 * 3);  // =3 seconds
+DebouncedSwitch my_switch(4, 200);      // switch on pin 4 with 200ms threshold
 
 void setup() {
-    // ...or provide a duration when starting the timer...
-    my_timer.start(1000);
-    // ...or set/change it anytime you want
-    my_timer.setDuration(2000);
-
-    // Check if my_timer is set and running
-    if (my_timer) { // short for my_timer.isSet()
-        Serial.println("my_timer is set, i.e. has got a duration.");
-    }
-    if (my_timer.isRunning()) {
-        Serial.println("... and has already been started!");
-    }
+    Serial.print("Threshold of my_debouncer is ");
+    Serial.println(my_debouncer.getThreshold());
 }
 
 void loop() {
-    // Easy check for repetitive tasks
-    if (my_timer.checkAndRestart()) {
-        task_each_2s();
+    // General debouncer for arbitrary types
+    my_debouncer.debounce(5);           // Simulate an incoming "5"
+    delay(1000);                        // Wait a second...
+
+    if (my_debouncer)  {                // Short for my_debouncer.isReady()
+        Serial.println("my_debouncer is ready.")
+    } else {
+        Serial.println("my_debouncer is not yet ready.")
     }
 
-    // Just check once without resetting another_timer
-    if (another_timer.check()) {
-        Serial.print("Congratulations, 7s have elapsed in total! ");
-        Serial.println("This message should be printed only once.");
+    if (my_debouncer.hasChanged()) {
+        Serial.print("Change incoming! The debounced signal is now: ");
+        Serial.println(my_debouncer.getDebounced())
     }
-}
 
-void task_each_2s() {
-    Serial.println("Yay, 2 seconds have passed again.");
-
-    // Check if another_timer is set
-    if (!another_timer) {   // short for another_timer.isSet()
-        another_timer.setDuration(5000);
-        Serial.println("Setting another_timer to 5s.");
-
-        // Fetch elapsed time
-        another_timer.start();
-        delay(10);
-        Serial.print("Right now, about 10ms should have elapsed: ");
-        Serial.println(another_timer.getElapsedTime());
+    // Specialized debouncer for switches
+    if (my_switch.hasChanged()) {
+        Serial.print("Hooray, somebody pushed the switch! State is now: ");
+        Serial.println(my_switch.isClosed() ? "pressed" : "not pressed");
     }
 }
 ```

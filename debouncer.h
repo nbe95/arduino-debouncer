@@ -1,9 +1,10 @@
 // Copyright (c) 2022 Niklas Bettgen
 
+#include "Arduino.h"
+
 #ifndef NBE95_ARDUINO_DEBOUNCER_H_
 #define NBE95_ARDUINO_DEBOUNCER_H_
 
-#include "Arduino.h"
 #include "./lib/timer/timer.h"
 
 

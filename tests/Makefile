@@ -2,7 +2,8 @@ tests:
 	set -e; \
 	for i in test-*/Makefile; do \
 		echo '==== Making:' $$(dirname $$i); \
-		cp ../debouncer.* $$(dirname $$i); \
+		find ../ -regex '.+\.\(cpp\|h\)' -exec cp "{}" "$$(dirname $$i)" \; ; \
+		cp -r ../lib $$(dirname $$i); \
 		$(MAKE) -C $$(dirname $$i); \
 	done
 
@@ -17,6 +18,7 @@ clean:
 	set -e; \
 	for i in test-*/Makefile; do \
 		echo '==== Cleaning:' $$(dirname $$i); \
-		rm $$(dirname $$i)/debouncer.* &> /dev/null || true; \
+		find -regex '.+\.\(cpp\|h\)' -delete; \
+		rm -rf $$(dirname $$i)/lib; \
 		$(MAKE) -C $$(dirname $$i) clean; \
 	done

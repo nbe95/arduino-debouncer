@@ -101,14 +101,14 @@ void loop() {
     delay(1000);                        // Wait a second...
 
     if (my_debouncer)  {                // Short for my_debouncer.isReady()
-        Serial.println("my_debouncer is ready.")
+        Serial.println("my_debouncer is ready.");
     } else {
-        Serial.println("my_debouncer is not yet ready.")
+        Serial.println("my_debouncer is not yet ready.");
     }
 
     if (my_debouncer.hasChanged()) {
         Serial.print("Change incoming! The debounced signal is now: ");
-        Serial.println(my_debouncer.getDebounced())
+        Serial.println(my_debouncer.getDebounced());
     }
 
     // Specialized debouncer for switches

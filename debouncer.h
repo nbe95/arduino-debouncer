@@ -67,7 +67,7 @@ template<class T> void Debouncer<T>::reset() {
 }
 
 template<class T> bool Debouncer<T>::hasChanged() {
-    // Note: This method is 'self-resetting'!
+    // Note: This method is self-resetting!
     // Call only once and store the return value as necessary
     bool changed = m_changed;
     m_changed = false;
@@ -82,7 +82,7 @@ class DebouncedSwitch : public Debouncer<bool> {
     Debouncer(threshold), m_pin(pin), m_pullup(pullup) {}
 
     // Switch status for easy handling
-    virtual void    debounce()              { Debouncer::debounce(digitalRead(m_pin) == m_pullup ? LOW : HIGH); }
+    virtual void    debounce()              { Debouncer::debounce(digitalRead(m_pin) == (m_pullup ? LOW : HIGH)); }
     virtual bool    isOpen() const          { return !getDebounced(); }
     virtual bool    isClosed() const        { return getDebounced(); }
 
